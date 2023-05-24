@@ -1,11 +1,48 @@
-body{
+html, body{
+    width: 100%;
+    height: 100%;
     margin:0;
-    background-image: "/stars.jpg";
+    padding: 0;
+    /* background-image: "/stars.jpg"; */
+}
+.canvas-container {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
-.monkeyInfo{
+.page {
+    position: relative;
+    z-index: 2;
+}
+/* .monkeyInfo{
     background-color: black;
     color: white;
     width:300px;
     justify-content: center;
+} */
+
+.section1 {
+    width: 100vw;
+    height: 100vh;
+    /* border: 5px solid red; */
+    display: flex;
+    /* background-color: black; */
+}
+.section2 {
+    width: 100vw;
+    height: 100vh;
+    border: 5px solid red;
+    display: flex;
+    /* background-color: black; */
+}
+.section3 {
+    width: 100vw;
+    height: 100vh;
+    border: 5px solid red;
+    display: flex;
+    /* background-color: black; */
 }

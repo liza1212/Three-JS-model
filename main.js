@@ -1,224 +1,107 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-// import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import * as dat from 'dat.gui';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import nebula from '/nebula.jpg';
-import stars from '/stars.jpg';
+// import stars from '/stars.jpg';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+console.log("You're doing great!! ")
+gsap.registerPlugin(ScrollTrigger)
 
-const container=document.getElementById('container')
+const COLORS = {
+  background: "white",
+  light: "#ffffff",
+  sky: "#aaaaff",
+  ground: "#88ff88",
+};
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+const scene= new THREE.Scene();
+scene.background= new THREE.Color(COLORS.background);
+scene.fog= new THREE.Fog(COLORS.background, 15, 20);
 
+const camera= new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.set(0,1,4);
+let cameraTarget = new THREE.Vector3(0, 1, 0);
 
-const squareurl= new URL('/monkey.glb', import.meta.url)
+scene.add(camera)
 
-const axisHelper= new THREE.AxesHelper();
-scene.add(axisHelper);
+const renderer= new THREE.WebGLRenderer(
+  {antialias: true, //This property is used to smooth out jagged edges in objects rendered in our scene, making the objects in the scene look real
+  }
+);
+// renderer.shadowMap.enabled = true;
+// renderer.useLegacyLights = true;
+// renderer.outputColorSpace = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ReinhardToneMapping;
+renderer.toneMappingExposure = 5;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-// const orbit= new OrbitControls(camera, renderer.domElement);
-const boxGeometry = new THREE.BoxGeometry();
-const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
-const box = new THREE.Mesh(boxGeometry, boxMaterial);
-// scene.add(box);
+const container= document.querySelector(".canvas-container");
+container.appendChild(renderer.domElement);
 
-const planeGeometry = new THREE.PlaneGeometry(50,50);
-const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff,
-	side: THREE.DoubleSide,
-});
-const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-// scene.add(plane);
-plane.rotation.x=-0.5*Math.PI;
-plane.receiveShadow=true;
+//Lights:
+const directionalLight = new THREE.DirectionalLight(COLORS.light, 2);
+directionalLight.castShadow = true;
+directionalLight.shadow.camera.far = 10;
+directionalLight.shadow.mapSize.set(1024, 1024);
+directionalLight.shadow.normalBias = 0.05;
+directionalLight.position.set(2, 5, 3);
 
-const sphereGeometry = new THREE.SphereGeometry();
-const sphereMaterial= new THREE.MeshBasicMaterial({color:0xffea00});
-const sphere= new THREE.Mesh(sphereGeometry, sphereMaterial);
-scene.add(sphere)
-sphere.position.set(0, 10, 0)
-
-const textContainer1=document.getElementById('monkey1');
-const textContainer2=document.getElementById('monkey2');
-const textContainer3=document.getElementById('monkey3');
-const textContainer4=document.getElementById('monkey4');
-
-
-
-// const gui= new dat.GUI();
-
-// const options={
-// 	sphereColor: "#ffea00",
-// 	speed:0.01,
-// };
-
-// gui.addColor(options,'sphereColor').onChange(function(e){
-// 	sphere.material.color.set(e);
-// })
-// gui.add(options, 'speed',0,0.1)
-
-// let step=0;
-
-const gridHelper= new THREE.GridHelper();
-scene.add(gridHelper);
+scene.add(directionalLight);
 
 
-const assetLoader= new GLTFLoader();
+const hemisphereLight = new THREE.HemisphereLight(
+  COLORS.sky,
+  COLORS.ground,
+  0.5
+);
+scene.add(hemisphereLight);
 
-//load 3d models
-assetLoader.load(squareurl.href, function(gltf){
-	const model= gltf.scene;
-	scene.add(model);
-	model.position.set(-12, 4, 10)
-	console.log("Model added")
+// renderer.render(scene, camera)
+
+//plane
+const plane = new THREE.PlaneGeometry(100, 100);
+const floorMaterial = new THREE.MeshStandardMaterial({ color: COLORS.ground });
+const floor = new THREE.Mesh(plane, floorMaterial);
+floor.receiveShadow = true;
+floor.castShadow= true;
+floor.rotateX(-Math.PI * 0.5);
+
+// scene.add(floor);
+
+//Loading 3d model
+const loader=new GLTFLoader();
+loader.load('/monkey.glb',function(gltf){
+  scene.receiveShadow=true;
+  scene.castShadow=true;
+  scene.add(gltf.scene);
 }, undefined, function(error){
-	console.log(error)
-});
+  console.error(error);
+})
 
-assetLoader.load(
-  squareurl.href,
-  function (gltf) {
-    const model = gltf.scene;
-    scene.add(model);
-    model.position.set(-12, 4, -10);
-    console.log("Model added");
-  },
-  undefined,
-  function (error) {
-    console.log(error);
-  }
-);
-
-assetLoader.load(
-  squareurl.href,
-  function (gltf) {
-    const model = gltf.scene;
-    scene.add(model);
-    model.position.set(12, 4, 10);
-    console.log("Model added");
-  },
-  undefined,
-  function (error) {
-    console.log(error);
-  }
-);
-assetLoader.load(
-  squareurl.href,
-  function (gltf) {
-    const model = gltf.scene;
-    scene.add(model);
-    model.position.set(12, 4, -10);
-    console.log("Model added");
-  },
-  undefined,
-  function (error) {
-    console.log(error);
-  }
-);
-
-// const ambientLight = new THREE.AmbientLight(0x333333);
-// scene.add(ambientLight);
-
-//normal sunlight:
-const sunLight = new THREE.DirectionalLight(0x0000ff, 0.8);
-// sunLight.position.set(-100,10,00);
-sunLight.castShadow=true;
-sunLight.shadow.camera.bottom=-12;
-scene.add(sunLight)
-
-const directionalLightHelpler= new THREE.DirectionalLightHelper(sunLight, 15);
-scene.add(directionalLightHelpler);
-
-
-camera.position.set(-14, 5, 16);
-camera.lookAt(0,0,0)
-// orbit.update();
-
-const textureLoader = new THREE.TextureLoader();
-scene.background = textureLoader.load(stars)
-
-
-let updatedCoord =[];
-
-function updateCoord(x,y,z){
-	updatedCoord=[]
-	console.log("Updating the values of coordinates.");
-	let temp = x*z;
-	if (temp>0){
-
-		z=Math.ceil(0-z)
-	}
-	else{
-		x=Math.ceil(0-x)
-	}
-	updatedCoord.push(x);
-	updatedCoord.push(y);
-	updatedCoord.push(z);
-	console.log(updatedCoord)
-}
-
-let currentText="monkey1";
-
-function getText(prevText){
-	console.log("function called2")
-	switch (prevText) {
-		case prevText === "monkey1":
-			currentText = "monkey2";
-			break;
-		case prevText === "monkey2":
-			currentText = "monkey3";
-			break;
-
-		case prevText === "monkey3":
-			currentText = "monkey4";
-			break;
-
-		case prevText === "monkey4":
-			currentText = "monkey1";
-			break;
-
-  }
-}
-
-//gsap
-
-const tl=gsap.timeline();
-gsap.registerPlugin(ScrollTrigger);
 window.addEventListener('mousedown', function(){
-	getText(currentText)
-	console.log(currentText);
-
-	updateCoord(camera.position.x, camera.position.y, camera.position.z);
-	tl.to(camera.position, {
-    x: updatedCoord[0],
-    y: updatedCoord[1],
-    z: updatedCoord[2],
-    duration: 1.5,
-    onUpdate: function () {
-      camera.lookAt(0, 0, 0);
-    },
+  // console.log("Mouse down")
+  const tl= gsap.timeline();
+  tl.to(camera.position, {
+    x:4,
+    y:0,
+    z:4,
+    duration:1.5,
+    scrub:true,
+    scrollTrigger:{
+      trigger:".section2",
+      start:"top 60%",
+      end:"top 40%",
+      markers:true,
+    }
   })
-    // .to(currentText, { opacity: 0 }, { opacity: 1 })
-    .to(textContainer2, { opacity: 0 }, { opacity: 1 })
-    .to(textContainer3, { opacity: 0 }, { opacity: 1 })
-	// .to(textContainer4,
-	// 	{opacity:0}, 
-	// 	{opacity:1}
-	// )
 })
 
 function animate() {
-
-	// step+=options.speed;
-	// sphere.position.y= 10*Math.abs(Math.sin(step))
-	requestAnimationFrame( animate );
-	renderer.render( scene, camera );
-
+  camera.lookAt(cameraTarget)
+  // setupAnimation();
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
 }
-
 animate();
