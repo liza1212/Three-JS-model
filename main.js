@@ -80,24 +80,50 @@ loader.load('/monkey.glb',function(gltf){
   console.error(error);
 })
 
+
+// SCROLL TRIGGERED ANIMATION
 window.addEventListener('mousedown', function(){
   // console.log("Mouse down")
-  const tl= gsap.timeline();
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".page",
+      start: "top center",
+      end: "bottom center",
+      scrub: 1,
+      toggleActions: "restart none none none",
+      markers: true,
+    },
+  });
   tl.to(camera.position, {
     x:4,
     y:0,
     z:4,
     duration:1.5,
-    scrub:true,
-    scrollTrigger:{
-      trigger:".section2",
-      start:"top 60%",
-      end:"top 40%",
-      markers:true,
-    }
   })
 })
 
+
+//This code not working: (without using addeventlistener):
+// {
+//   const tl = gsap.timeline(
+//   {scrollTrigger: {
+//     trigger: ".page",
+//     start: "top center",
+//     end: "bottom center",
+//     scrub: 1,
+//     toggleActions: "restart none none none",
+//     markers: true,
+//   }}
+// );
+
+// tl.to(camera.position, {
+//   x: 4,
+//   y: 0,
+//   z: 4,
+//   duration: 1.5,
+// });
+
+// }
 function animate() {
   camera.lookAt(cameraTarget)
   // setupAnimation();

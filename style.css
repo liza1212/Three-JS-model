@@ -5,6 +5,17 @@ html, body{
     padding: 0;
     /* background-image: "/stars.jpg"; */
 }
+h1{
+    /* color:aquamarine; */
+    margin: 30px;
+}
+
+p{
+    color:cadetblue ;
+    margin: 30px;
+    font-size: large;
+}
+
 .canvas-container {
     z-index: 1;
     position: fixed;
@@ -17,32 +28,25 @@ html, body{
 .page {
     position: relative;
     z-index: 2;
+    margin: 80px;
+    /* background-color: black; */
 }
-/* .monkeyInfo{
-    background-color: black;
-    color: white;
-    width:300px;
-    justify-content: center;
-} */
 
 .section1 {
-    width: 100vw;
+    width: 50vw;
     height: 100vh;
     /* border: 5px solid red; */
-    display: flex;
     /* background-color: black; */
 }
 .section2 {
-    width: 100vw;
+    width: 50vw;
     height: 100vh;
-    border: 5px solid red;
-    display: flex;
+    border: 2px solid red;
     /* background-color: black; */
 }
 .section3 {
-    width: 100vw;
+    width: 50vw;
     height: 100vh;
-    border: 5px solid red;
-    display: flex;
+    border: 2px solid red;
     /* background-color: black; */
 }
