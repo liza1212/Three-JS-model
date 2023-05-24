@@ -1,0 +1,11 @@
+body{
+    margin:0;
+    background-image: "/stars.jpg";
+}
+
+.monkeyInfo{
+    background-color: black;
+    color: white;
+    width:300px;
+    justify-content: center;
+}
