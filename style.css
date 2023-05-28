@@ -29,6 +29,8 @@ p{
     position: relative;
     z-index: 2;
     margin: 80px;
+    display: flex;
+    flex-direction: column;
     /* background-color: black; */
 }
 
@@ -39,6 +41,7 @@ p{
     /* background-color: black; */
 }
 .section2 {
+    margin-left: 50%;
     width: 50vw;
     height: 100vh;
     border: 2px solid red;
@@ -48,5 +51,12 @@ p{
     width: 50vw;
     height: 100vh;
     border: 2px solid red;
+    /* background-color: black; */
+}
+
+.section4 {
+    width: 50vw;
+    height: 100vh;
+    /* border: 2px solid red; */
     /* background-color: black; */
 }

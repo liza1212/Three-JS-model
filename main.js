@@ -1,9 +1,5 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-// import stars from '/stars.jpg';
-
 console.log("You're doing great!! ")
 gsap.registerPlugin(ScrollTrigger)
 
@@ -14,13 +10,15 @@ const COLORS = {
   ground: "#88ff88",
 };
 
+
 const scene= new THREE.Scene();
 scene.background= new THREE.Color(COLORS.background);
 scene.fog= new THREE.Fog(COLORS.background, 15, 20);
 
 const camera= new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.set(0,1,4);
-let cameraTarget = new THREE.Vector3(0, 1, 0);
+camera.position.set(3, 1, 4);
+let cameraTarget = new THREE.Vector3(1, 0, 1);
+// camera.lookAt(1,0,1)
 
 scene.add(camera)
 
@@ -46,7 +44,7 @@ directionalLight.castShadow = true;
 directionalLight.shadow.camera.far = 10;
 directionalLight.shadow.mapSize.set(1024, 1024);
 directionalLight.shadow.normalBias = 0.05;
-directionalLight.position.set(2, 5, 3);
+directionalLight.position.set(10, 8, 5);
 
 scene.add(directionalLight);
 
@@ -70,60 +68,105 @@ floor.rotateX(-Math.PI * 0.5);
 
 // scene.add(floor);
 
+
+const axesHelper = new THREE.AxesHelper(5);
+scene.add(axesHelper);
+
 //Loading 3d model
 const loader=new GLTFLoader();
-loader.load('/monkey.glb',function(gltf){
-  scene.receiveShadow=true;
-  scene.castShadow=true;
+loader.load('/public/monkey.glb',function(gltf){
+  // model= gltf.scene;
+  // model.position.set(10,10,10)
+  scene.receiveShadow = true;
+  scene.castShadow = true;
+  gltf.scene.position.set(3, 0, 0);
   scene.add(gltf.scene);
+  console.log(gltf.scene.position)
+  const tl = gsap.timeline();
+  tl.to(camera.position, {
+    x: 6,
+    y: 0,
+    z: 3,
+    scrollTrigger: {
+      trigger: ".section2",
+      start: "top bottom",
+      end: "top 10%",
+      scrub: 1,
+      toggleActions: "restart reverse resume reset",
+      // markers: true,
+    },
+  })
+    .to(gltf.scene.position, {
+      y: -1,
+      z: 2,
+      scrollTrigger: {
+        trigger: ".section2",
+        start: "top bottom",
+        end: "top 10%",
+        scrub: 1,
+        toggleActions: "restart reverse resume reset",
+      },
+    })
+    .to(camera.position,{
+      x:-3,
+      scrollTrigger:{
+        trigger:".section3",
+        start: "top bottom",
+        end: "top top",
+        scrub: 1,
+      },
+      onUpdate: function () {
+        camera.position.set(6, 0, 3);
+        gltf.scene.position.set(3, -1, 2);
+      }})
+      .to(camera.position, {
+      x: 3,
+      y: 1,
+      z: 5,
+      scrollTrigger: {
+        trigger: ".section3",
+        start: "top bottom",
+        end: "top top",
+        scrub: 1,
+        markers: true,
+        toggleActions: "restart reverse resume reset",
+      },
+    })
+    .to(cameraTarget,{
+      x:3,
+      y:1,
+      z:0,
+      scrollTrigger: {
+        trigger: ".section3",
+        start: "top bottom",
+        end: "top top",
+        scrub: 1,
+        markers: true,
+        toggleActions: "restart reverse resume reset",
+        onUpdate: function(){
+          console.log(cameraTarget)
+        }
+      },
+    })
+    .to(gltf.scene.position, {
+      x: 6,
+      y: 0,
+      z: 0,
+      duration: 1.5,
+      scrollTrigger: {
+        trigger: ".section3",
+        start: "top bottom",
+        end: "top top",
+        scrub: 1,
+        markers: true,
+        toggleActions: "restart reverse resume reset",
+      },
+    });
 }, undefined, function(error){
   console.error(error);
 })
 
 
-// SCROLL TRIGGERED ANIMATION
-window.addEventListener('mousedown', function(){
-  // console.log("Mouse down")
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".page",
-      start: "top center",
-      end: "bottom center",
-      scrub: 1,
-      toggleActions: "restart none none none",
-      markers: true,
-    },
-  });
-  tl.to(camera.position, {
-    x:4,
-    y:0,
-    z:4,
-    duration:1.5,
-  })
-})
-
-
-//This code not working: (without using addeventlistener):
-// {
-//   const tl = gsap.timeline(
-//   {scrollTrigger: {
-//     trigger: ".page",
-//     start: "top center",
-//     end: "bottom center",
-//     scrub: 1,
-//     toggleActions: "restart none none none",
-//     markers: true,
-//   }}
-// );
-
-// tl.to(camera.position, {
-//   x: 4,
-//   y: 0,
-//   z: 4,
-//   duration: 1.5,
-// });
-
-// }
 function animate() {
   camera.lookAt(cameraTarget)
   // setupAnimation();
