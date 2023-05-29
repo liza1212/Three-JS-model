@@ -37,8 +37,13 @@ p{
 .section1 {
     width: 50vw;
     height: 100vh;
+    /* font-size: xx-large; */
     /* border: 5px solid red; */
     /* background-color: black; */
+    font-size: 6em;
+        text-align: right;
+        margin-right: 10%;
+        padding-top: 10%;
 }
 .section2 {
     margin-left: 50%;
@@ -59,4 +64,8 @@ p{
     height: 100vh;
     /* border: 2px solid red; */
     /* background-color: black; */
+        font-size: 6em;
+            text-align: right;
+            margin-right: 10%;
+            padding-top: 10%;
 }
