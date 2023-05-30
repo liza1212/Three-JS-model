@@ -128,7 +128,7 @@ loader.load('/public/monkey.glb',function(gltf){
         start: "top bottom",
         end: "top top",
         scrub: 1,
-        markers: true,
+        // markers: true,
         toggleActions: "restart reverse resume reset",
       },
     })
@@ -141,7 +141,7 @@ loader.load('/public/monkey.glb',function(gltf){
         start: "top bottom",
         end: "top top",
         scrub: 1,
-        markers: true,
+        // markers: true,
         toggleActions: "restart reverse resume reset",
         onUpdate: function(){
           console.log(cameraTarget)
@@ -158,7 +158,7 @@ loader.load('/public/monkey.glb',function(gltf){
         start: "top bottom",
         end: "top top",
         scrub: 1,
-        markers: true,
+        // markers: true,
         toggleActions: "restart reverse resume reset",
       },
     });

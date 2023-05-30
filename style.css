@@ -3,6 +3,7 @@ html, body{
     height: 100%;
     margin:0;
     padding: 0;
+    overflow-x: hidden;
     /* background-image: "/stars.jpg"; */
 }
 h1{
@@ -47,19 +48,18 @@ p{
 }
 .section2 {
     margin-left: 50%;
-    width: 50vw;
-    height: 100vh;
+    /* margin-top: 20%;
+    margin-bottom: 30%; */
+    width: 45vw;
+    height: 60vh;
+    /* padding: 50; */
     border: 2px solid red;
-    /* background-color: black; */
-}
-.section3 {
-    width: 50vw;
-    height: 100vh;
-    border: 2px solid red;
+    /* z-index: -1; */
     /* background-color: black; */
 }
 
-.section4 {
+
+.section3 {
     width: 50vw;
     height: 100vh;
     /* border: 2px solid red; */
@@ -68,4 +68,9 @@ p{
             text-align: right;
             margin-right: 10%;
             padding-top: 10%;
+}
+
+.empty{
+    height: 100vh;
+    border: 3px solid blue;
 }
